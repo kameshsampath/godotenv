@@ -229,6 +229,16 @@ func TestExpanding(t *testing.T) {
 			map[string]string{"BAR": ""},
 		},
 		{
+			"expands host environment variables",
+			"BAR=$LANG",
+			map[string]string{"BAR": "en_US.UTF-8"},
+		},
+		{
+			"expands to local variable over host environment variable with same name",
+			"LANG=en_US.UTF\nBAR=$LANG",
+			map[string]string{"BAR": "en_US.UTF"},
+		},
+		{
 			"expands variables in double quoted strings",
 			"FOO=test\nBAR=\"quote $FOO\"",
 			map[string]string{"FOO": "test", "BAR": "quote test"},

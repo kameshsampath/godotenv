@@ -336,6 +336,15 @@ func expandVariables(v string, m map[string]string) string {
 		}
 		if submatch[1] == "\\" || submatch[2] == "(" {
 			return submatch[0][1:]
+		} else if submatch[2] == "$" {
+			//local value of the dotenv file takes precedence
+			ev := m[submatch[4]]
+			//if there is no local variable by name then lookup in the os
+			//environment
+			if ev == "" {
+				ev = os.ExpandEnv(s)
+			}
+			return ev
 		} else if submatch[4] != "" {
 			return m[submatch[4]]
 		}
